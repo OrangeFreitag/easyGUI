@@ -3,13 +3,11 @@ package com.company;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-public class GUI  {
+public class GUI {
     JTextField textField;
-    SieveOfAtkin candidatePool = new SieveOfAtkin();
-    private int[] primes;
-    int counter = 0;
+
     public GUI() {
         JFrame frame = new JFrame("Frame Demo");
         JLabel label1 = new JLabel("Bitte eine Zahl eingeben", JLabel.CENTER);
@@ -22,31 +20,49 @@ public class GUI  {
         frame.setVisible(true);
 
     }
+
     public void actionPerformed(ActionEvent evt) {
         String text = textField.getText();
+        JFrame messageFrame = new JFrame("Meldung");
         int candidate = Integer.parseInt(text);
-        if(isPrimeNumber(candidate))
-            System.out.print(candidate + "is a prime.");
-        else
-            System.out.print(candidate + "is not a prime");
-
+        if (-1 != isPrimeNumber(candidate)) {
+            JOptionPane.showMessageDialog(messageFrame,
+                    candidate +" is a prime.");
+        }
+        else {
+            JOptionPane.showMessageDialog(messageFrame,
+                    candidate + " is not a prime.");
+        }
+        messageFrame.setVisible(true);
     }
 
-    public boolean isPrimeNumber(int candidate)
-    {
-        fibonacciSearch searcher = new fibonacciSearch();
-        int arr[] = buildArray(candidatePool.sieve);
-        int n = 11;
+    public int isPrimeNumber(int candidate) {
+        SieveOfAtkin candidatePool = new SieveOfAtkin();
+        candidatePool.determineCandiatePool();
+        BinarySearch searcher = new BinarySearch();
+        int arr[] = convertIntegers(buildArrayList(candidatePool.sieve));
+        int n = arr.length;
         int x = candidate;
-        return searcher.fibMonaccianSearch(arr, x, n);
+        return searcher.binarySearch(arr,0,n-1,x);
     }
-    public int[] buildArray(boolean[] candidatePool)
-    {
-        for (int i = 0; i < candidatePool.length-1; i++) {
-            if(candidatePool[i]== true)
-                primes[counter] = i;
+
+    public ArrayList buildArrayList(boolean[] candidatePool) {
+        ArrayList primes = new ArrayList<Integer>();
+        int counter = 0;
+        for (int i = 0; i < candidatePool.length - 1; i++) {
+            if (candidatePool[i] == true)
+                primes.add(counter);
             counter++;
         }
         return primes;
+    }
+    public static int[] convertIntegers(ArrayList<Integer> integers)
+    {
+        int[] ret = new int[integers.size()];
+        for (int i=0; i < ret.length; i++)
+        {
+            ret[i] = integers.get(i).intValue();
+        }
+        return ret;
     }
 }

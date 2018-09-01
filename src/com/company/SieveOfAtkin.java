@@ -9,7 +9,7 @@ public class SieveOfAtkin {
     public static boolean[] sieve = new boolean[limit + 1];
     private static int limitSqrt = (int)Math.sqrt((double)limit);
 
-    public static void main(String[] args) {
+    public void determineCandiatePool() {
         // there may be more efficient data structure
         // arrangements than this (there are!) but
         // this is the algorithm in Wikipedia
@@ -74,8 +74,7 @@ public class SieveOfAtkin {
 
 
 
-
-        /*
+/*
         for (int i = 0, j = 0; i <= limit; i++) {
             if (sieve[i]) {
                 System.out.printf("%,8d", i);
